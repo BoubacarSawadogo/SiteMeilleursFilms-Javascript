@@ -1,12 +1,29 @@
-console.log(filmData[0].text);
-const img = document.getElementsByTagName("img");
-const input = document.getElementById("filter");
-//img[0].src = "";
+window.onload = function () {
+  // Creation d'un film
+  function createFilm(number) {
+    let someFilm = filmData[number];
 
-const div2 = document.getElementById("selection1");
-const film = document.getElementsByClassName("film");
+    // div qui contient un film
+    let filmConteneur = document.createElement("div");
+    filmConteneur.className = "film";
+    filmConteneur.id = number + "-film";
 
-console.log(film);
-console.log(div2);
+    // creation image du film(someFilm)
+    let image = document.createElement("img");
+    image.src = someFilm.image;
+    image.alt = someFilm.title;
 
-div2.appendChild(film[0]);
+    let titre = document.createElement("h3");
+    titre.innerHTML = someFilm.title;
+
+    filmConteneur.appendChild(image);
+    filmConteneur.appendChild(titre);
+
+    //Ajout du film cree dans le grand conteneur de tous les films
+    let conteneurGeneralFilm = document.getElementById("films");
+    conteneurGeneralFilm.appendChild(filmConteneur);
+  }
+
+  createFilm(0);
+  createFilm(1);
+};
