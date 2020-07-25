@@ -6,7 +6,7 @@ window.onload = function () {
     // div qui contient un film
     let filmConteneur = document.createElement("div");
     filmConteneur.className = "film";
-    filmConteneur.id = number + "-film";
+    filmConteneur.id = number;
 
     // creation image du film(someFilm)
     let image = document.createElement("img");
@@ -22,8 +22,53 @@ window.onload = function () {
     //Ajout du film cree dans le grand conteneur de tous les films
     let conteneurGeneralFilm = document.getElementById("films");
     conteneurGeneralFilm.appendChild(filmConteneur);
+
+    //Ajout evenement onClick
+  }
+  // Affichage de tout les films
+  let i = 0;
+  for (let i = 0; i < filmData.length; i++) {
+    createFilm(i);
   }
 
-  createFilm(0);
-  createFilm(1);
+  // Filtrage des films par mot cle
+  let inputFilter = document.getElementById("filter");
+  inputFilter.addEventListener("keyup", rechercher);
+
+  function rechercher(event) {
+    let inputValue = event.target.value;
+    inputValue = inputValue.toLowerCase();
+
+    for (let i = 0; i < filmData.length; i++) {
+      let title = filmData[i].title;
+      let film = document.getElementById(i);
+      title = title.toLowerCase();
+      if (title.includes(inputValue)) {
+        film.style.display = "inline-block";
+      } else {
+        film.style.display = "none";
+      }
+    }
+  }
+
+  // Autre moyen d'afficher dynamique tous les films
+  /* function addFilms() {
+    let films = filmData.slice();
+    let filmmm = "";
+    let filmsAll = films.forEach((film) => {
+      filmmm += `
+      <div class="film">
+            <img
+              src=${film.image}
+              alt=${film.title}
+            />
+            <h3>${film.title}</h3>
+          </div>
+      `;
+    });
+    let conteneurGeneralFilm = document.getElementById("films");
+    conteneurGeneralFilm.innerHTML = filmmm;
+  }
+  addFilms();
+  */
 };
