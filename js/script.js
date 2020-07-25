@@ -24,22 +24,9 @@ window.onload = function () {
     //Ajout du film cree dans le grand conteneur de tous les films
     let conteneurGeneralFilm = document.getElementById("films");
     conteneurGeneralFilm.appendChild(filmConteneur);
-
-    filmConteneur.addEventListener("click", function (event) {
-      console.log(filmData[event.target.id]);
-      try {
-        document
-          .getElementById("selection1")
-          .appendChild(filmData[event.target.id]);
-      } catch (error) {}
-      document.getElementById("details").innerHTML =
-        filmData[event.target.id].text;
-    });
-
-    //Ajout evenement onClick
   } //****FIN***/
 
-  // Affichage de tout les films
+  // Affichage de tous les films
   let i = 0;
   for (let i = 0; i < filmData.length; i++) {
     createFilm(i);
@@ -48,8 +35,16 @@ window.onload = function () {
   // Filtrage des films par mot cle
   let inputFilter = document.getElementById("filter");
   inputFilter.addEventListener("keyup", rechercher);
+  // desactiver affichage details du films selectionne
   let afficherDetails = document.getElementById("AfficherDetails");
-  afficherDetails.addEventListener("input", afficherDeatailsFilm);
+  afficherDetails.addEventListener("input", desactiverDetailsFilm);
+  // Ajout evenement click a chaque film
+  let films = document.getElementsByClassName("film");
+  for (let i = 0; i < films.length; i++) {
+    films[i].addEventListener("click", selectionnerFilm);
+    films[i].addEventListener("mouseover", afficherDeatailsFilm);
+    films[i].addEventListener("mouseout", finSurvol);
+  }
 
   function rechercher(event) {
     let inputValue = event.target.value;
@@ -67,12 +62,29 @@ window.onload = function () {
     }
   }
 
-  function afficherDeatailsFilm() {
-    console.log(afficherDetails.checked);
+  function desactiverDetailsFilm() {
     if (!afficherDetails.checked) {
       document.getElementById("details").style.display = "none";
     } else {
       document.getElementById("details").style.display = "inline-block";
+    }
+  }
+  function afficherDeatailsFilm(event) {
+    let film = filmData[event.target.id];
+    document.getElementById("details").innerHTML = film.text;
+  }
+
+  function finSurvol(event) {
+    document.getElementById("details").innerHTML = "";
+  }
+
+  function selectionnerFilm(event) {
+    let film = filmData[event.target.id];
+    let filmDisplay = `<div class="film"><img src=${film.image} alt=${film.title} /> <h3>${film.title}</h3></div> `;
+    try {
+      document.getElementById("selection1").appendChild(filmDisplay);
+    } catch (error) {
+      console.log(error);
     }
   }
 
