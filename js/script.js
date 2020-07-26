@@ -49,6 +49,14 @@ window.onload = function () {
   let vider = document.getElementById("vider");
   vider.addEventListener("click", viderSelectionFilm);
 
+  // suppresion film selectionne
+  /* let select1 = document.getElementById("selection1");
+  select1.addEventListener("click", removeSelection1);
+  let select = document.getElementById("selection2");
+  select1.addEventListener("click", removeSelection2);*/
+  let selection = document.getElementById("selection");
+  selection.addEventListener("click", removeSelection);
+
   function rechercher(event) {
     let inputValue = event.target.value;
     inputValue = inputValue.toLowerCase();
@@ -74,7 +82,9 @@ window.onload = function () {
   } //fin
   function afficherDetailsFilm(event) {
     let film = filmData[event.target.id];
-    document.getElementById("details").innerHTML = film.text;
+    try {
+      document.getElementById("details").innerHTML = film.text;
+    } catch (error) {}
   }
 
   function finSurvol(event) {
@@ -92,8 +102,8 @@ window.onload = function () {
     } else if (selection2Child.length == 1) {
       selection2.insertBefore(film, selection2Child[0]);
     }
-    films.addEventListener("mouseover", afficherDetailsFilm);
-    films.addEventListener("mouseout", finSurvol);
+    film.addEventListener("mouseover", afficherDetailsFilm);
+    film.addEventListener("mouseout", finSurvol);
   } // fin
 
   function viderSelectionFilm() {
@@ -103,14 +113,33 @@ window.onload = function () {
     let selection1Child = selection1.childNodes;
     let selection2Child = selection2.childNodes;
     if (selection1Child.length == 2 && selection2Child.length == 1) {
-      selection1.removeChild(selection1Child[0]);
+      let film1 = selection1Child[0];
+      selection1.removeChild(film1);
+      document.getElementById("films").appendChild(film1);
     } else if (selection2Child.length == 2 && selection1Child.length == 1) {
-      selection2.removeChild(selection2Child[0]);
+      let film2 = selection2Child[0];
+      selection2.removeChild(film2);
+      document.getElementById("films").appendChild(film2);
     } else if (selection1Child.length == 2 && selection2Child.length == 2) {
-      selection1.removeChild(selection1Child[0]);
-      selection2.removeChild(selection2Child[0]);
+      let film1 = selection1Child[0];
+      let film2 = selection2Child[0];
+      selection1.removeChild(film1);
+      selection2.removeChild(film2);
+      document.getElementById("films").appendChild(film1);
+      document.getElementById("films").appendChild(film2);
     }
-  }
+  } // fin
+
+  function removeSelection(event) {
+    let filmClicked = event.target.parentNode;
+    let select = filmClicked.parentNode;
+    let selectChilds = select.childNodes;
+    if (selectChilds[0].className == "film") {
+      let copyFilm = selectChilds[0];
+      select.removeChild(copyFilm);
+      document.getElementById("films").appendChild(copyFilm);
+    }
+  } //fin
 
   // Autre moyen d'afficher dynamiqueMENT tous les films
   /* function addFilms() {
