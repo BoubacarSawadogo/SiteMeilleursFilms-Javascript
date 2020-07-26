@@ -42,9 +42,12 @@ window.onload = function () {
   let films = document.getElementsByClassName("film");
   for (let i = 0; i < films.length; i++) {
     films[i].addEventListener("click", selectionnerFilm);
-    films[i].addEventListener("mouseover", afficherDeatailsFilm);
+    films[i].addEventListener("mouseover", afficherDetailsFilm);
     films[i].addEventListener("mouseout", finSurvol);
   }
+  //vider les films selectionnes
+  let vider = document.getElementById("vider");
+  vider.addEventListener("click", viderSelectionFilm);
 
   function rechercher(event) {
     let inputValue = event.target.value;
@@ -68,23 +71,44 @@ window.onload = function () {
     } else {
       document.getElementById("details").style.display = "inline-block";
     }
-  }
-  function afficherDeatailsFilm(event) {
+  } //fin
+  function afficherDetailsFilm(event) {
     let film = filmData[event.target.id];
     document.getElementById("details").innerHTML = film.text;
   }
 
   function finSurvol(event) {
     document.getElementById("details").innerHTML = "";
-  }
+  } //fin
 
   function selectionnerFilm(event) {
-    let film = filmData[event.target.id];
-    let filmDisplay = `<div class="film"><img src=${film.image} alt=${film.title} /> <h3>${film.title}</h3></div> `;
-    try {
-      document.getElementById("selection1").appendChild(filmDisplay);
-    } catch (error) {
-      console.log(error);
+    let film = event.target.parentNode;
+    let selection1 = document.getElementById("selection1");
+    let selection2 = document.getElementById("selection2");
+    let selection1Child = selection1.childNodes;
+    let selection2Child = selection2.childNodes;
+    if (selection1Child.length == 1) {
+      selection1.insertBefore(film, selection1Child[0]);
+    } else if (selection2Child.length == 1) {
+      selection2.insertBefore(film, selection2Child[0]);
+    }
+    films.addEventListener("mouseover", afficherDetailsFilm);
+    films.addEventListener("mouseout", finSurvol);
+  } // fin
+
+  function viderSelectionFilm() {
+    let film = event.target.parentNode;
+    let selection1 = document.getElementById("selection1");
+    let selection2 = document.getElementById("selection2");
+    let selection1Child = selection1.childNodes;
+    let selection2Child = selection2.childNodes;
+    if (selection1Child.length == 2 && selection2Child.length == 1) {
+      selection1.removeChild(selection1Child[0]);
+    } else if (selection2Child.length == 2 && selection1Child.length == 1) {
+      selection2.removeChild(selection2Child[0]);
+    } else if (selection1Child.length == 2 && selection2Child.length == 2) {
+      selection1.removeChild(selection1Child[0]);
+      selection2.removeChild(selection2Child[0]);
     }
   }
 
